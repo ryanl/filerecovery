@@ -1,0 +1,76 @@
+File Rescue Utility
+===================
+
+This program is Copyright (C) 2010-2012 Ryan Lothian. All rights reserved.
+
+
+Purpose 
+-------
+
+This program finds JPEG images and ASCII text files within a disk. It is 
+intended for use when the file allocation table has been overwritten. The 
+program is file-system agnostic: provided that the file system doesn't fragment
+a file, compress it or encrypt it, this program may be able to recover it.
+
+Visit http://www.ryanlothian.com/projects/file_recovery/ for more information.
+
+
+License 
+-------
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) 
+any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for 
+more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 
+51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ 
+
+Dependencies
+------------
+
+  * g++                   - to compile the program  
+
+  * gzip                  - to compress fragments found; PEG fragments that 
+                            compress to < 1kB are probably junk rather than
+                            images
+                  
+  * bash or another shell - to run gzip
+
+
+You'll also need a 64-bit CPU and OS in order to open files/disks that larger 
+than, say, 1 GB.
+
+
+How to use
+----------
+To compile:
+
+  sh build.sh
+  
+To run:
+
+  cd <directory you want to the image write files to>
+  ./rescue <file or device name> | bash
+  
+Fragments (files found) get written to the current directory, and there may be 
+several thousand of them. This program writes Unix commands to stdout - they 
+cut down on false positives. 
+
+You can test it by running it on an image file:
+
+  ./rescue someimage.jpg | bash
+
+   # This will produce a file: jpg-fragment-1.jpg.gz
+  
+For real-world usage, you'll probably wish to run it on a disk device:
+
+  ./rescue /dev/sda | bash
+
+
